@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:subway_info/data/data_source/subway_info_api.dart';
 
+import '../core/result.dart';
 import '../data/model/subway_arrival_info.dart';
 import '../data/repository/subway_arrival_info_repository.dart';
 import '../data/repository/subway_arrival_info_repository_impl.dart';
@@ -12,13 +13,13 @@ final getIt = GetIt.instance;
 void diSetup() {
   getIt.registerSingleton<Dio>(Dio());
 
-  getIt.registerSingleton<SubwayInfoApi>(SubwayInfoApi(dio: getIt<Dio>()));
+  getIt.registerSingleton<SubwayInfoApi>(SubwayInfoApi(dio: getIt()));
 
   getIt.registerSingleton<SubwayArrivalInfoRepository>(
-      SubwayArrivalInfoRepositoryImpl(getIt<SubwayInfoApi>()));
+      SubwayArrivalInfoRepositoryImpl(getIt()));
 
-  getIt.registerFactory(() => MainViewModel(
-      subwayArrivalInfoRepository: getIt<SubwayArrivalInfoRepository>()));
+  getIt.registerFactory(
+      () => MainViewModel(subwayArrivalInfoRepository: getIt()));
 }
 
 class SubwayArrivalInfoRepositoryMock implements SubwayArrivalInfoRepository {
@@ -196,13 +197,13 @@ class SubwayArrivalInfoRepositoryMock implements SubwayArrivalInfoRepository {
   };
 
   @override
-  Future<List<SubwayArrivalInfo>> getSubwayArrivalInfoList(
+  Future<Result<List<SubwayArrivalInfo>>> getSubwayArrivalInfoList(
       String stationName) async {
     final List<SubwayArrivalInfo> subwayArrivalInfoList =
         (mockJson['realtimeArrivalList'] as List<dynamic>)
             .map((e) => SubwayArrivalInfo.fromJson(e))
             .toList();
 
-    return subwayArrivalInfoList;
+    return Result.success(subwayArrivalInfoList);
   }
 }

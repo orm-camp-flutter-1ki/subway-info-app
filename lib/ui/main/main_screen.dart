@@ -32,17 +32,14 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           const Text('지하철 역 이름을 입력하세요.'),
           TextField(
+            onChanged: (value) {
+              viewModel.getSubwayArrivalInfoList(value);
+            },
             controller: _textEditingController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: '지하철 역 이름',
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              viewModel.getSubwayArrivalInfoList(_textEditingController.text);
-            },
-            child: const Text('조회'),
           ),
           Expanded(
             child: ListView(

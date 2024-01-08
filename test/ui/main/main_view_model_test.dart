@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
+import 'package:subway_info/core/result.dart';
 import 'package:subway_info/data/model/subway_arrival_info.dart';
 import 'package:subway_info/data/repository/subway_arrival_info_repository.dart';
 import 'package:subway_info/di/di_setup.dart';
@@ -206,13 +207,13 @@ class SubwayArrivalInfoRepositoryMock implements SubwayArrivalInfoRepository {
   };
 
   @override
-  Future<List<SubwayArrivalInfo>> getSubwayArrivalInfoList(
+  Future<Result<List<SubwayArrivalInfo>>> getSubwayArrivalInfoList(
       String stationName) async {
     final List<SubwayArrivalInfo> subwayArrivalInfoList =
         (mockJson['realtimeArrivalList'] as List<dynamic>)
             .map((e) => SubwayArrivalInfo.fromJson(e))
             .toList();
 
-    return subwayArrivalInfoList;
+    return Result.success(subwayArrivalInfoList);
   }
 }
