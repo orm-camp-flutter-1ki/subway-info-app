@@ -4,8 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:subway_info/ui/main/main_view_model.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  final _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +32,7 @@ class MainScreen extends StatelessWidget {
         children: [
           const Text('지하철 역 이름을 입력하세요.'),
           TextField(
+            controller: _textEditingController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: '지하철 역 이름',
@@ -26,7 +40,7 @@ class MainScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              viewModel.getSubwayArrivalInfoList('수원');
+              viewModel.getSubwayArrivalInfoList(_textEditingController.text);
             },
             child: const Text('조회'),
           ),

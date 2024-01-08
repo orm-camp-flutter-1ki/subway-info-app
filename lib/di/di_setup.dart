@@ -1,14 +1,21 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:subway_info/data/data_source/subway_info_api.dart';
 
 import '../data/model/subway_arrival_info.dart';
 import '../data/repository/subway_arrival_info_repository.dart';
+import '../data/repository/subway_arrival_info_repository_impl.dart';
 import '../ui/main/main_view_model.dart';
 
 final getIt = GetIt.instance;
 
 void diSetup() {
+  getIt.registerSingleton<Dio>(Dio());
+
+  getIt.registerSingleton<SubwayInfoApi>(SubwayInfoApi(dio: getIt<Dio>()));
+
   getIt.registerSingleton<SubwayArrivalInfoRepository>(
-      SubwayArrivalInfoRepositoryMock());
+      SubwayArrivalInfoRepositoryImpl(getIt<SubwayInfoApi>()));
 
   getIt.registerFactory(() => MainViewModel(
       subwayArrivalInfoRepository: getIt<SubwayArrivalInfoRepository>()));
